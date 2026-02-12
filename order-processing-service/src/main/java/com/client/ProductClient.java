@@ -2,6 +2,8 @@ package com.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+
+import com.dto.ProductResponse;
 import com.dto.ProductStockDto;
 
 @FeignClient(name = "product-service", path = "/api/v1/products")
@@ -21,4 +23,7 @@ public interface ProductClient {
 	@PostMapping("/{id}/stock/release")
 	void release(@PathVariable("id") Long productId,
 			@RequestParam("qty") Integer qty);
+
+	@GetMapping("/products/{id}")
+	ProductResponse getProduct(@PathVariable Long id);
 }

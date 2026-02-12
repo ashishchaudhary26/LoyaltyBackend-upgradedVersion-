@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.client.AuthClient;
 import com.client.ProductClient;
 import com.dto.*;
 import com.entity.*;
@@ -31,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
 
     // private final SqsPublisher sqsPublisher;
     private final ProductClient productClient;
+    private final AuthClient authClient;
 
     public OrderServiceImpl(
             NotificationService notificationService,
@@ -38,13 +40,15 @@ public class OrderServiceImpl implements OrderService {
             OrderItemsRepository orderItemsRepository,
             PaymentsRepository paymentsRepository,
             ShippingAddressesRepository shippingAddressesRepository,
-            ProductClient productClient) {
+            ProductClient productClient,
+            AuthClient authClient) {
         this.notificationService = notificationService;
         this.ordersRepository = ordersRepository;
         this.orderItemsRepository = orderItemsRepository;
         this.paymentsRepository = paymentsRepository;
         this.shippingAddressesRepository = shippingAddressesRepository;
         this.productClient = productClient;
+        this.authClient = authClient;
     }
 
     @Override
@@ -159,6 +163,25 @@ public class OrderServiceImpl implements OrderService {
 
             orderItemsRepository.saveAll(entities);
             System.out.println("Order items saved, count=" + entities.size());
+
+            // reward
+
+            double totalReward = 0.0;
+
+            for (OrderItemDto item : req.getItems()) {
+                ProductResponse product = productClient.getProduct(item.getProductId());
+
+                if (Boolean.TRUE.equals(product.getRewardEnabled())) {
+                    double reward = (product.getPrice() * item.getQuantity())
+                            * (product.getRewardPercentage() / 100);
+                    totalReward += reward;
+                }
+            }
+
+            order.setRewardEarned(totalReward);
+            authClient.addReward(order.getUserId(), totalReward);
+
+            //
 
             // 6) Return response
             OrderResponse resp = OrderMapper.toResponse(savedOrder);

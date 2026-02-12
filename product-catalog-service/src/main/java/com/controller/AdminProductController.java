@@ -77,4 +77,15 @@ public class AdminProductController {
     public ResponseEntity<BrandDto> createBrand(@Valid @RequestBody BrandDto dto) {
         return ResponseEntity.status(201).body(productService.createBrand(dto));
     }
+
+    // reward new fature added on 10/02
+    @PutMapping("/{productId}/reward")
+    public ResponseEntity<?> updateReward(
+            @PathVariable Long productId,
+            @RequestParam Boolean enabled,
+            @RequestParam Double percentage) {
+
+        productService.updateReward(productId, enabled, percentage);
+        return ResponseEntity.ok("Reward settings updated");
+    }
 }

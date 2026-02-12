@@ -12,9 +12,9 @@ public interface ProductService {
     Page<ProductDto> listAvailable(Pageable pageable);
 
     Page<ProductDto> search(Long categoryId, Long brandId,
-                            java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice,
-                            String keyword,
-                            Pageable pageable);
+            java.math.BigDecimal minPrice, java.math.BigDecimal maxPrice,
+            String keyword,
+            Pageable pageable);
 
     ProductDetailDto getProductDetails(Long productId);
 
@@ -27,21 +27,28 @@ public interface ProductService {
     void softDeleteProduct(Long productId);
 
     ProductStockDto updateStock(Long productId, UpdateStockRequest req);
+
     List<BrandDto> listBrands();
+
     List<CategoryDto> listCategories();
+
     CategoryDto createCategory(CategoryDto dto);
+
     BrandDto createBrand(BrandDto dto);
 
     List<ProductImageDto> getProductImages(Long productId);
 
     List<ProductReviewDto> getProductReviews(Long productId);
+
     ProductReviewDto addProductReview(Long productId, Long userId, CreateReviewRequest req);
 
     ProductDto getProductBySku(String sku);
 
     // image helper methods
     ProductImageDto addProductImage(Long productId, ProductImageDto dto);
+
     void deleteProductImage(Long productId, Long imageId);
+
     ProductStockDto getStock(Long productId);
 
     void reserveStock(Long productId, Integer qty);
@@ -49,4 +56,9 @@ public interface ProductService {
     void commitStock(Long productId, Integer qty);
 
     void releaseStock(Long productId, Integer qty);
+
+    void updateReward(Long productId, Boolean enabled, Double percentage);
+
+    public ProductDto getProductById(Long id);
+
 }

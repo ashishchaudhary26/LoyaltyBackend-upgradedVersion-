@@ -32,4 +32,6 @@ public interface AuthService {
 
     AuthResponse refreshAccessToken(String refreshToken);
 
+    public void addReward(Long userId, Double amount);
+
 }

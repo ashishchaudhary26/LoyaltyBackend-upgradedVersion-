@@ -14,12 +14,9 @@ import java.util.Objects;
 
 @Schema(description = "Users entity representing application users")
 @Entity
-@Table(
-    name = "users",
-    uniqueConstraints = {
+@Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(name = "uc_users_email", columnNames = "email")
-    }
-)
+})
 public class Users implements Serializable {
 
     @Id
@@ -38,12 +35,10 @@ public class Users implements Serializable {
     private String fullName;
     private String mobileNumber;
 
-    // ✅ NEW: Role entity mapping
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    // ✅ OLD role column kept (RENAMED)
     @Schema(description = "User role string (legacy)", example = "ROLE_CUSTOMER")
     @Column(name = "role", nullable = false)
     private String roleName = "ROLE_CUSTOMER";
@@ -58,10 +53,14 @@ public class Users implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Users() {}
+    @Column(name = "reward_balance")
+    private Double rewardBalance = 0.0;
+
+    public Users() {
+    }
 
     public Users(String email, String passwordHash, String fullName,
-                 String mobileNumber, String roleName) {
+            String mobileNumber, String roleName) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.fullName = fullName;
@@ -70,28 +69,62 @@ public class Users implements Serializable {
         this.isActive = true;
     }
 
-    // ---------------- GETTERS / SETTERS ----------------
+    public Double getRewardBalance() {
+        return rewardBalance;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public void setRewardBalance(Double rewardBalance) {
+        this.rewardBalance = rewardBalance;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getMobileNumber() { return mobileNumber; }
-    public void setMobileNumber(String mobileNumber) { this.mobileNumber = mobileNumber; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    // ✅ New role object access
-    public Role getRole() { return role; }
-    public void setRole(Role role) { this.role = role; }
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 
-    // ✅ BACKWARD COMPATIBILITY (IMPORTANT)
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Transient
     public String getRoleName() {
         if (role != null) {
@@ -105,13 +138,21 @@ public class Users implements Serializable {
         this.roleName = roleName;
     }
 
-    public Boolean getIsActive() { return isActive; }
-    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
+    public Boolean getIsActive() {
+        return isActive;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 
-    // ---------------- equals / hashCode ----------------
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
 
     @Override
     public int hashCode() {
@@ -120,8 +161,10 @@ public class Users implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Users)) return false;
+        if (this == obj)
+            return true;
+        if (!(obj instanceof Users))
+            return false;
         Users other = (Users) obj;
         return Objects.equals(id, other.id);
     }

@@ -40,8 +40,7 @@ public class Products {
     private String shortDescription;
 
     @Column(columnDefinition = "TEXT")
-    @Schema(description = "Detailed description of the product",
-            example = "This iPhone features a 6.1-inch display, A17 Pro chip, and triple-camera system.")
+    @Schema(description = "Detailed description of the product", example = "This iPhone features a 6.1-inch display, A17 Pro chip, and triple-camera system.")
     private String description;
 
     @Column(name = "brand_id")
@@ -74,25 +73,45 @@ public class Products {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Categories category;
 
+    @Column(name = "reward_enabled")
+    private Boolean rewardEnabled = false;
 
+    @Column(name = "reward_percentage")
+    private Double rewardPercentage = 0.0;
+
+    public void setRewardEnabled(Boolean rewardEnabled) {
+        this.rewardEnabled = rewardEnabled;
+    }
+
+    public void setRewardPercentage(Double rewardPercentage) {
+        this.rewardPercentage = rewardPercentage;
+    }
+
+    public Boolean getRewardEnabled() {
+        return rewardEnabled;
+    }
+
+    public Double getRewardPercentage() {
+        return rewardPercentage;
+    }
 
     public Brands getBrand() {
-		return brand;
-	}
+        return brand;
+    }
 
-	public void setBrand(Brands brand) {
-		this.brand = brand;
-	}
+    public void setBrand(Brands brand) {
+        this.brand = brand;
+    }
 
-	public Categories getCategory() {
-		return category;
-	}
+    public Categories getCategory() {
+        return category;
+    }
 
-	public void setCategory(Categories category) {
-		this.category = category;
-	}
+    public void setCategory(Categories category) {
+        this.category = category;
+    }
 
-	@PrePersist
+    @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -102,8 +121,6 @@ public class Products {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-    
 
     public Long getId() {
         return id;

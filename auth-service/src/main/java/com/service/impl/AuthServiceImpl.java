@@ -195,4 +195,13 @@ public class AuthServiceImpl implements AuthService {
                 user.getId(), user.getEmail(), user.getRoleName());
     }
 
+    @Override
+    public void addReward(Long userId, Double amount) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setRewardBalance(user.getRewardBalance() + amount);
+        userRepository.save(user);
+    }
+
 }

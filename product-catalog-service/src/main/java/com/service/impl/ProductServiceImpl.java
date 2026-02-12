@@ -401,4 +401,39 @@ public class ProductServiceImpl implements ProductService {
         out.setDescription(saved.getDescription());
         return out;
     }
+
+    @Override
+    public ProductDto getProductById(Long id) {
+        Products product = productsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        ProductDto dto = new ProductDto();
+        dto.setId(product.getId());
+        dto.setSku(product.getSku());
+        dto.setProductName(product.getProductName());
+        dto.setShortDescription(product.getShortDescription());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        dto.setAvailable(product.isAvailable());
+        dto.setBrandId(product.getBrandId());
+        dto.setCategoryId(product.getCategoryId());
+
+        dto.setRewardEnabled(product.getRewardEnabled());
+        dto.setRewardPercentage(product.getRewardPercentage());
+
+        return dto;
+    }
+
+    // reward
+    @Override
+    public void updateReward(Long productId, Boolean enabled, Double percentage) {
+        Products product = productsRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setRewardEnabled(enabled);
+        product.setRewardPercentage(enabled ? percentage : 0.0);
+
+        productsRepository.save(product);
+    }
+
 }

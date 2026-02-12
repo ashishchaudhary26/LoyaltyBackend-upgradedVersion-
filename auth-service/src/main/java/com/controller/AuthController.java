@@ -39,15 +39,6 @@ public class AuthController {
         return ResponseEntity.status(201).body(resp);
     }
 
-    // @Operation(summary = "Login user and receive JWT", description =
-    // "Authenticates user credentials and returns JWT token")
-    // @PostMapping("/login")
-    // public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest
-    // req) {
-    // AuthResponse resp = authService.login(req);
-    // return ResponseEntity.ok(resp);
-    // }
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request,
             HttpServletResponse response) {
@@ -116,6 +107,13 @@ public class AuthController {
 
         authService.logoutByUserId(userId);
         return ResponseEntity.noContent().build();
+    }
+
+    // reward
+    @PutMapping("/{userId}/add-reward")
+    public void addReward(@PathVariable Long userId,
+            @RequestParam Double amount) {
+        authService.addReward(userId, amount);
     }
 
 }

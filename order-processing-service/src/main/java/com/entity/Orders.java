@@ -81,32 +81,8 @@ public class Orders {
     @Column(name = "customer_name")
     private String customerName;
 
-    // @Override
-    // public int hashCode() {
-    // return Objects.hash(cartUuid, createdAt, id, orderNumber, orderStatus,
-    // paymentReference, totalAmount, updatedAt,
-    // userId);
-    // }
-
-    // @Override
-    // public boolean equals(Object obj) {
-    // if (this == obj)
-    // return true;
-    // if (obj == null)
-    // return false;
-    // if (getClass() != obj.getClass())
-    // return false;
-    // Orders other = (Orders) obj;
-    // return Objects.equals(cartUuid, other.cartUuid) && Objects.equals(createdAt,
-    // other.createdAt)
-    // && Objects.equals(id, other.id) && Objects.equals(orderNumber,
-    // other.orderNumber)
-    // && Objects.equals(orderStatus, other.orderStatus)
-    // && Objects.equals(paymentReference, other.paymentReference)
-    // && Objects.equals(totalAmount, other.totalAmount) &&
-    // Objects.equals(updatedAt, other.updatedAt)
-    // && Objects.equals(userId, other.userId);
-    // }
+    // new feature for reward calculation
+    private Double rewardEarned = 0.0;
 
     public String getCustomerName() {
         return customerName;
@@ -222,6 +198,14 @@ public class Orders {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Double getRewardEarned() {
+        return rewardEarned;
+    }
+
+    public void setRewardEarned(Double rewardEarned) {
+        this.rewardEarned = rewardEarned;
     }
 
     // @Override

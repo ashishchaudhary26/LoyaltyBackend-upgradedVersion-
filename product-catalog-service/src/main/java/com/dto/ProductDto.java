@@ -4,11 +4,10 @@ package com.dto;
 import java.math.BigDecimal;
 import java.util.List;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 
-@Schema(
-    name = "ProductDto",
-    description = "Basic product information returned in product list or search API"
-)
+@AllArgsConstructor
+@Schema(name = "ProductDto", description = "Basic product information returned in product list or search API")
 public class ProductDto {
 
     @Schema(description = "Primary key of the product", example = "101", accessMode = Schema.AccessMode.READ_ONLY)
@@ -38,41 +37,110 @@ public class ProductDto {
     @Schema(description = "Category ID of the product", example = "12")
     private Long categoryId;
 
-    @Schema(
-        description = "List of image metadata for the product (first one usually used as thumbnail)",
-        implementation = ProductImageDto.class
-    )
+    @Schema(description = "List of image metadata for the product (first one usually used as thumbnail)", implementation = ProductImageDto.class)
     private List<ProductImageDto> images;
 
-    public ProductDto() {}
+    // new feature reward
+    private Boolean rewardEnabled;
+    private Double rewardPercentage;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    /////
+    public Boolean getRewardEnabled() {
+        return rewardEnabled;
+    }
 
-    public String getSku() { return sku; }
-    public void setSku(String sku) { this.sku = sku; }
+    public void setRewardEnabled(Boolean rewardEnabled) {
+        this.rewardEnabled = rewardEnabled;
+    }
 
-    public String getProductName() { return productName; }
-    public void setProductName(String productName) { this.productName = productName; }
+    public Double getRewardPercentage() {
+        return rewardPercentage;
+    }
 
-    public String getShortDescription() { return shortDescription; }
-    public void setShortDescription(String shortDescription) { this.shortDescription = shortDescription; }
+    public void setRewardPercentage(Double rewardPercentage) {
+        this.rewardPercentage = rewardPercentage;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public ProductDto() {
+    }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
+    public Long getId() {
+        return id;
+    }
 
-    public boolean isAvailable() { return available; }
-    public void setAvailable(boolean available) { this.available = available; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getBrandId() { return brandId; }
-    public void setBrandId(Long brandId) { this.brandId = brandId; }
+    public String getSku() {
+        return sku;
+    }
 
-    public Long getCategoryId() { return categoryId; }
-    public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
 
-    public List<ProductImageDto> getImages() { return images; }
-    public void setImages(List<ProductImageDto> images) { this.images = images; }
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public Long getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public List<ProductImageDto> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImageDto> images) {
+        this.images = images;
+    }
 }
