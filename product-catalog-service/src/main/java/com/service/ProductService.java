@@ -1,6 +1,7 @@
 package com.service;
 
 import com.dto.*;
+import com.entity.Reward;
 
 import java.util.List;
 
@@ -57,8 +58,11 @@ public interface ProductService {
 
     void releaseStock(Long productId, Integer qty);
 
-    void updateReward(Long productId, Boolean enabled, Double percentage);
+    // void updateReward(Long productId, Boolean enabled, Double percentage);
 
-    public ProductDto getProductById(Long id);
+    // public ProductDto getProductById(Long id);
+    void saveOrUpdateReward(Long productId, Double percentage, Boolean active);
+
+    RewardResponseDto getRewardByProductId(Long productId);
 
 }

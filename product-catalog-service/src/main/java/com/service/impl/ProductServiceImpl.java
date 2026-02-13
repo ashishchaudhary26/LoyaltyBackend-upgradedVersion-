@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +30,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductReviewRepository productReviewRepository;
     private final BrandsRepository brandsRepository;
     private final CategoriesRepository categoriesRepository;
+    private final RewardRepository rewardRepository;
 
     @Autowired
     public ProductServiceImpl(
@@ -37,13 +39,15 @@ public class ProductServiceImpl implements ProductService {
             ProductImageRepository productImageRepository,
             ProductReviewRepository productReviewRepository,
             BrandsRepository brandsRepository,
-            CategoriesRepository categoriesRepository) {
+            CategoriesRepository categoriesRepository,
+            RewardRepository rewardRepository) {
         this.productsRepository = productsRepository;
         this.productStockRepository = productStockRepository;
         this.productImageRepository = productImageRepository;
         this.productReviewRepository = productReviewRepository;
         this.brandsRepository = brandsRepository;
         this.categoriesRepository = categoriesRepository;
+        this.rewardRepository = rewardRepository;
     }
 
     private List<Product_Images> loadMainImageList(Long productId) {
@@ -402,38 +406,41 @@ public class ProductServiceImpl implements ProductService {
         return out;
     }
 
-    @Override
-    public ProductDto getProductById(Long id) {
-        Products product = productsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        ProductDto dto = new ProductDto();
-        dto.setId(product.getId());
-        dto.setSku(product.getSku());
-        dto.setProductName(product.getProductName());
-        dto.setShortDescription(product.getShortDescription());
-        dto.setDescription(product.getDescription());
-        dto.setPrice(product.getPrice());
-        dto.setAvailable(product.isAvailable());
-        dto.setBrandId(product.getBrandId());
-        dto.setCategoryId(product.getCategoryId());
-
-        dto.setRewardEnabled(product.getRewardEnabled());
-        dto.setRewardPercentage(product.getRewardPercentage());
-
-        return dto;
-    }
-
     // reward
+
+    // Admin Save or Update Reward
     @Override
-    public void updateReward(Long productId, Boolean enabled, Double percentage) {
+    public void saveOrUpdateReward(Long productId, Double percentage, Boolean active) {
+
         Products product = productsRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        product.setRewardEnabled(enabled);
-        product.setRewardPercentage(enabled ? percentage : 0.0);
+        Optional<Reward> existingReward = rewardRepository.findByProductIdAndActiveTrue(productId);
 
-        productsRepository.save(product);
+        if (existingReward.isPresent()) {
+            Reward reward = existingReward.get();
+            reward.setRewardPercentage(percentage);
+            reward.setActive(active);
+            rewardRepository.save(reward);
+        } else {
+            Reward reward = new Reward(percentage, active, product);
+            rewardRepository.save(reward);
+        }
+    }
+
+    public RewardResponseDto getRewardByProductId(Long productId) {
+
+        Reward reward = rewardRepository
+                .findByProductIdAndActiveTrue(productId)
+                .orElse(null);
+
+        if (reward == null)
+            return null;
+
+        return new RewardResponseDto(
+                reward.getId(),
+                reward.getRewardPercentage(),
+                reward.getActive());
     }
 
 }

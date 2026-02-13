@@ -1,6 +1,8 @@
 package com.controller;
 
 import com.dto.*;
+import com.entity.Products;
+import com.entity.Reward;
 import com.service.ProductService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -131,6 +133,22 @@ public class ProductController {
             @RequestParam("qty") Integer qty) {
         productService.releaseStock(id, qty);
         return ResponseEntity.noContent().build();
+    }
+
+    // @GetMapping("/rewards/{productId}")
+    // public ResponseEntity<?> getReward(@PathVariable Long productId) {
+
+    // Reward reward = productService.getRewardByProductId(productId);
+
+    // if (reward == null) {
+    // return ResponseEntity.ok("No reward available");
+    // }
+
+    // return ResponseEntity.ok(reward);
+    // }
+    @GetMapping("/rewards/{productId}")
+    public ResponseEntity<?> getReward(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.getRewardByProductId(productId));
     }
 
 }

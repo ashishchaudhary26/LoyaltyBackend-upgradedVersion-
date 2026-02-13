@@ -4,16 +4,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -73,26 +78,16 @@ public class Products {
     @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private Categories category;
 
-    @Column(name = "reward_enabled")
-    private Boolean rewardEnabled = false;
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Reward reward;
 
-    @Column(name = "reward_percentage")
-    private Double rewardPercentage = 0.0;
-
-    public void setRewardEnabled(Boolean rewardEnabled) {
-        this.rewardEnabled = rewardEnabled;
+    public Reward getReward() {
+        return reward;
     }
 
-    public void setRewardPercentage(Double rewardPercentage) {
-        this.rewardPercentage = rewardPercentage;
-    }
-
-    public Boolean getRewardEnabled() {
-        return rewardEnabled;
-    }
-
-    public Double getRewardPercentage() {
-        return rewardPercentage;
+    public void setReward(Reward reward) {
+        this.reward = reward;
     }
 
     public Brands getBrand() {
